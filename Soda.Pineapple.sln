@@ -3,12 +3,56 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B98DA32D-84F6-4CCD-9529-60E4E6210684}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D32FEFDE-751C-4EC7-A914-CCD5000AE651}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{C6527260-9F45-4E8F-86B6-39D7D3142483}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{56B74361-76C6-4DD8-A8FB-77BADBB71BBD}"
+	ProjectSection(SolutionItems) = preProject
+		doc\doc.md = doc\doc.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soda.Pineapple.Sample", "samples\Soda.Pineapple.Sample\Soda.Pineapple.Sample.csproj", "{7B17BB09-6B7B-40D3-83C6-29790DED68A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soda.Pineapple", "src\Soda.Pineapple\Soda.Pineapple.csproj", "{A1BFF6D4-5A2B-4098-8092-F87750DD823F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soda.Pineapple.Tests", "test\Soda.Pineapple.Tests\Soda.Pineapple.Tests.csproj", "{ED8A2B60-47E4-4A82-A069-B878A4FBDEA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{E5D4B652-DB8A-4F50-8EC0-A82D4A3C9D54}"
+	ProjectSection(SolutionItems) = preProject
+		README.MD = README.MD
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B17BB09-6B7B-40D3-83C6-29790DED68A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B17BB09-6B7B-40D3-83C6-29790DED68A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B17BB09-6B7B-40D3-83C6-29790DED68A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B17BB09-6B7B-40D3-83C6-29790DED68A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1BFF6D4-5A2B-4098-8092-F87750DD823F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1BFF6D4-5A2B-4098-8092-F87750DD823F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1BFF6D4-5A2B-4098-8092-F87750DD823F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1BFF6D4-5A2B-4098-8092-F87750DD823F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED8A2B60-47E4-4A82-A069-B878A4FBDEA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED8A2B60-47E4-4A82-A069-B878A4FBDEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED8A2B60-47E4-4A82-A069-B878A4FBDEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED8A2B60-47E4-4A82-A069-B878A4FBDEA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B17BB09-6B7B-40D3-83C6-29790DED68A0} = {C6527260-9F45-4E8F-86B6-39D7D3142483}
+		{A1BFF6D4-5A2B-4098-8092-F87750DD823F} = {B98DA32D-84F6-4CCD-9529-60E4E6210684}
+		{ED8A2B60-47E4-4A82-A069-B878A4FBDEA1} = {D32FEFDE-751C-4EC7-A914-CCD5000AE651}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3C1E627-31E5-48B3-894A-D98AE461AA4B}
 	EndGlobalSection
 EndGlobal
