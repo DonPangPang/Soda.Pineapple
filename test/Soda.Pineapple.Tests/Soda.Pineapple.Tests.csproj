@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Soda.Pineapple\Soda.Pineapple.csproj" />
+  </ItemGroup>
+
 </Project>
