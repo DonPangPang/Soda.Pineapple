@@ -13,10 +13,10 @@ internal class PineappleBuilder
         Instance = Services.BuildServiceProvider();
     }
 
-    public T GetService<T>() where T : notnull
+    public static Lazy<T> GetService<T>() where T : notnull
     {
         if (Instance is null) throw new ArgumentNullException();
 
-        return Instance.GetRequiredService<T>();
+        return Instance.GetRequiredService<Lazy<T>>();
     }
 }

@@ -7,17 +7,16 @@ namespace Soda.Pineapple;
 
 public class PineappleDbContext<T> : DbContext where T : DbContext
 {
-    private readonly IMultipleTypeBuilderService _multipleTypeBuilderService;
+    private Lazy<IMultipleTypeBuilderService> MultipleTypeBuilderService => PineappleBuilder.GetService<IMultipleTypeBuilderService>();
     internal DbSet<VirtualTable> VirtualTables { get; set; } = null!;
 
-    public PineappleDbContext(DbContextOptions<T> options, IMultipleTypeBuilderService multipleTypeBuilderService) : base(options)
+    public PineappleDbContext(DbContextOptions<T> options) : base(options)
     {
-        _multipleTypeBuilderService = multipleTypeBuilderService;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        foreach (var type in _multipleTypeBuilderService.GetTypes())
+        foreach (var type in MultipleTypeBuilderService.Value.GetTypes())
         {
             var entityType = modelBuilder.Model.FindEntityType(type);
             if (entityType is null)
