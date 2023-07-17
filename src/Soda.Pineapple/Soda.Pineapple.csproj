@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Options\" />
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>

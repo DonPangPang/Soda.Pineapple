@@ -12,21 +12,22 @@ public interface IMultipleTypeBuilderService
     void GenerateType(Type baseType);
 
     IEnumerable<Type> GetTypes();
+
+    IEnumerable<Type> GetTypes<T>() where T : class;
 }
 
 internal class MultipleTypeBuilderService : IMultipleTypeBuilderService
 {
-    private readonly IOptions<PineappleOptions> _options;
+    private Lazy<IOptions<PineappleOptions>> Options => PineappleBuilder.GetService<IOptions<PineappleOptions>>();
     private readonly ConcurrentDictionary<string, MultipleTypeContainer> _typesContainers = new();
     private readonly ModuleBuilder _moduleBuilder;
 
-    public MultipleTypeBuilderService(IOptions<PineappleOptions> options)
+    public MultipleTypeBuilderService()
     {
-        _options = options;
-        _moduleBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("_RuntimeTypes"), AssemblyBuilderAccess.Run).DefineDynamicModule("_RuntimeTypes");
+        _moduleBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("_PineappleRuntimeTypes"), AssemblyBuilderAccess.Run).DefineDynamicModule("_RuntimeTypes");
     }
 
-    private string Suffix => _options.Value.SplittingRule.GetSuffix();
+    private string Suffix => Options.Value.Value.SplittingRule.GetSuffix();
 
     public void GenerateType(Type baseType)
     {
@@ -63,6 +64,16 @@ internal class MultipleTypeBuilderService : IMultipleTypeBuilderService
     public IEnumerable<Type> GetTypes()
     {
         return _typesContainers.Values.SelectMany(x => x.Types);
+    }
+
+    public IEnumerable<Type> GetTypes<T>() where T : class
+    {
+        if (_typesContainers.TryGetValue(nameof(T), out var container))
+        {
+            return container.Types;
+        }
+
+        return Enumerable.Empty<Type>();
     }
 }
 

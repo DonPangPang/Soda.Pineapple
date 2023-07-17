@@ -6,7 +6,7 @@ namespace Soda.Pineapple.Domain;
 
 [Table("__VirtualTable")]
 [Index(nameof(MainTableName))]
-internal class VirtualTable
+public class VirtualTable
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
