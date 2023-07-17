@@ -9,7 +9,7 @@ using Soda.Pineapple.Services;
 
 namespace Soda.Pineapple;
 
-public class PineappleDbContext : PineappleDbContext<PineappleDbContext>
+internal class PineappleDbContext : PineappleDbContext<PineappleDbContext>
 {
     internal DbSet<VirtualTable> VirtualTables { get; set; } = null!;
     public PineappleDbContext(DbContextOptions<PineappleDbContext> options) : base(options)
@@ -32,7 +32,7 @@ public class PineappleDbContext<T> : DbContext where T : DbContext
         foreach (var item in modelBuilder.Model.GetEntityTypes()
                      .Where(x=>x.ClrType.GetCustomAttributes<VirtualTableAttribute>().Any()))
         {
-            modelBuilder.Entity(item.Name).ToTable(Options.Value.Value.SplittingRule.GetSuffix());
+            modelBuilder.Entity(item.Name).ToTable($"{item.Name}_{Options.Value.Value.SplittingRule.GetSuffix()}");
         }
         
         foreach (var type in MultipleTypeBuilderService.Value.GetTypes())

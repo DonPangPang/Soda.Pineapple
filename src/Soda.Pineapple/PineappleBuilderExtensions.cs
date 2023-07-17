@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Soda.Pineapple.Actions;
 using Soda.Pineapple.Extensions;
+using Soda.Pineapple.Generators;
 using Soda.Pineapple.Options;
 using Soda.Pineapple.Services;
 using Soda.Pineapple.Services.PublicServices;
@@ -53,6 +54,11 @@ public static class PineappleBuilderExtensions
     private static void AddActions(this IServiceCollection services)
     {
         services.AddTransient(typeof(CreateTableAction));
+    }
+
+    private static void AddGenerator(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(CreateTableGenerator));
     }
 
     private static void AddJobs(this IServiceCollection services)

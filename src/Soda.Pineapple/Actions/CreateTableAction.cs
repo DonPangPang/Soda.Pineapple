@@ -1,48 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Soda.Pineapple.Generators;
 
 namespace Soda.Pineapple.Actions;
 
 internal class CreateTableAction
 {
-    public TableInfo Create(IEntityType entityType)
+    private Lazy<PineappleDbContext> PineappleDbContext => PineappleBuilder.GetService<PineappleDbContext>();
+    private Lazy<CreateTableGenerator> CreateTableGenerator => PineappleBuilder.GetService<CreateTableGenerator>();
+    public async Task Create(IEntityType entityType)
     {
-        var tableName = entityType.GetTableName() ?? entityType.ClrType.Name;
+        var service = PineappleDbContext.Value.GetService<IMigrationsSqlGenerator>();
 
-        // 获取列信息
-        var columns = entityType.GetProperties()
-            .Select(p => new ColumnInfo
-            {
-                Name = p.GetColumnName(),
-                Type = p.GetColumnType(),
-                IsNullable = p.IsNullable,
-                MaxLength = p.GetMaxLength(),
-                IsPrimaryKey = p.IsPrimaryKey(),
-                Comment = p.GetComment()
-            })
-            .ToList();
+        var operation = CreateTableGenerator.Value.Create(entityType);
 
-        return new TableInfo()
+        var cmds = service.Generate(new[] { operation }).Select(x=>x.CommandText);
+
+        await using var command = PineappleDbContext.Value.Database.GetDbConnection().CreateCommand();
+        await PineappleDbContext.Value.Database.OpenConnectionAsync();
+
+        foreach (var cmd in cmds)
         {
-            Name = tableName,
-            ColumnInfos = columns
-        };
+            command.CommandText = cmd;
+            await command.ExecuteScalarAsync();
+        }
     }
-}
-
-internal class TableInfo
-{
-    public required string Name { get; set; }
-    
-    public required List<ColumnInfo> ColumnInfos { get; set; }
-}
-
-internal class ColumnInfo
-{
-    public string Name { get; set; } = string.Empty;
-    public string Type { get; set; } = string.Empty;
-    public bool IsNullable { get; set; } = true;
-    public int? MaxLength { get; set; }
-    public bool IsPrimaryKey { get; set; }
-    public string? Comment { get; set; }
 }

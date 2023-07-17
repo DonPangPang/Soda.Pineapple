@@ -3,7 +3,7 @@ using Soda.Pineapple.Domain;
 
 namespace Soda.Pineapple.Services;
 
-public interface IVirtualTableService
+internal interface IVirtualTableService
 {
     Task<IEnumerable<VirtualTable>> Get();
     Task<IEnumerable<VirtualTable>> Get(Type type);
