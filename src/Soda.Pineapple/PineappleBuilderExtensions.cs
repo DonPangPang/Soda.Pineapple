@@ -41,8 +41,9 @@ public static class PineappleBuilderExtensions
         {
             opt.SplittingRule = options.SplittingRule;
         });
-
+        
         builder.Services.AddActions();
+        builder.Services.AddGenerators();
         builder.Services.AddJobs();
         
         builder.Build();
@@ -56,7 +57,7 @@ public static class PineappleBuilderExtensions
         services.AddTransient(typeof(CreateTableAction));
     }
 
-    private static void AddGenerator(this IServiceCollection services)
+    private static void AddGenerators(this IServiceCollection services)
     {
         services.AddTransient(typeof(CreateTableGenerator));
     }
