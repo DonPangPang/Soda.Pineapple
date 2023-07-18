@@ -20,8 +20,8 @@ public static class PineappleBuilderExtensions
     where TDbContext:DbContext
     {
         #region 公有服务
-        services.AddDbContext<PineappleDbContext<TDbContext>>(builderAction, lifetime);
-        services.AddTransient(typeof(AutoDbContext<>));
+        services.AddDbContext<TDbContext>(builderAction, lifetime);
+        services.AddScoped(typeof(AutoDbContext<>));
         #endregion
 
         #region 私有服务
@@ -34,7 +34,8 @@ public static class PineappleBuilderExtensions
         // MultipleType构建
         builder.Services.AddSingleton<IMultipleTypeBuilderService, MultipleTypeBuilderService>();
         builder.Services.AddScoped<IVirtualTableService, VirtualTableService>();
-
+        builder.Services.AddSingleton<SplittingFactory>();
+        
         var options = new PineappleOptions();
         actionOption?.Invoke(options);
         builder.Services.Configure<PineappleOptions>(opt =>

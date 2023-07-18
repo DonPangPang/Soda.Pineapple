@@ -22,7 +22,7 @@ internal class CreateTableGenerator
                 MaxLength = p.GetMaxLength(),
                 IsUnicode = p.IsUnicode(),
                 Comment = p.GetComment()
-            }));
+            }).ToList());
 
         creator.PrimaryKey = new AddPrimaryKeyOperation()
         {

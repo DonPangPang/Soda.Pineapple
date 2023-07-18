@@ -12,11 +12,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSodaPineapple<SampleDbContext>(builder =>
+// builder.Services.AddDbContext<SampleDbContext>(opts =>
+// {
+//     opts.UseInMemoryDatabase("test");
+// });
+
+builder.Services.AddSodaPineapple<SampleDbContext>(opts =>
+{
+    opts.UseMySql("Server=127.0.0.1;Port=3306;Database=pine;Uid=root;Pwd=Mx@7722111;", new MySqlServerVersion(new Version(8, 0)), opt =>
     {
-        builder.UseInMemoryDatabase("test");
-    })
-    .ReplaceServices<ITableSplittingRule, SplitBaseOnDate>();
+
+    });
+}, ServiceLifetime.Scoped, options => options.SplittingRule = new SplitBaseOnDate(DateMode.YearMonthDayHourMin));
 
 var app = builder.Build();
 
@@ -26,6 +33,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+var scoped = app.Services.CreateScope();
+var db = scoped.ServiceProvider.GetRequiredService<SampleDbContext>();
+db.Database.EnsureCreated();
 
 app.UseSodaPineapple();
 

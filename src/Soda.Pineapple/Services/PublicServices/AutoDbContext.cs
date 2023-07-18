@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Options;
+using Soda.Pineapple.Actions;
 using Soda.Pineapple.Attributes;
 using Soda.Pineapple.Options;
 
@@ -9,20 +10,35 @@ namespace Soda.Pineapple.Services.PublicServices;
 
 public sealed class AutoDbContext<TDbContext> where TDbContext : PineappleDbContext<TDbContext>
 {
-    private readonly PineappleDbContext<TDbContext> _dbContext;
+    private readonly TDbContext _dbContext;
     
     private Lazy<IOptions<PineappleOptions>> Options => PineappleBuilder.GetService<IOptions<PineappleOptions>>();
 
     private Lazy<IMultipleTypeBuilderService> MultipleTypeBuilderService =>
         PineappleBuilder.GetService<IMultipleTypeBuilderService>();
+
+    private Lazy<CreateTableAction> Action => PineappleBuilder.GetService<CreateTableAction>();
+    private Lazy<SplittingFactory> SplittingFactory => PineappleBuilder.GetService<SplittingFactory>();
     
-    
-    public AutoDbContext(PineappleDbContext<TDbContext> dbContext)
+    public AutoDbContext(TDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public DbContext Db => _dbContext;
+
+    public DbSet<T> Set<T>() where T : class
+    {
+        var suffix = Options.Value.Value.SplittingRule.GetSuffix();
+        if (suffix != SplittingFactory.Value.Suffix)
+        {
+            Action.Value.Create(_dbContext.Model.FindEntityType(typeof(T))!).GetAwaiter().GetResult();
+            SplittingFactory.Value.Suffix = suffix;
+            DynamicModelCacheKeyFactory.ChangeTableMapping();
+        }
+        
+        return _dbContext.Set<T>();
+    }
     
     public IQueryable<T> Table<T>() where T:class
     {

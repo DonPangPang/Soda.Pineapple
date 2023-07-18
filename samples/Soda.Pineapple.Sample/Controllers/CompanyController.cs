@@ -27,7 +27,7 @@ public class CompanyController:ControllerBase
     [HttpPost]
     public async Task<IActionResult> SetCompany([FromBody] Company company)
     {
-        _autoDbContext.Db.Add(company);
+        _autoDbContext.Set<Company>().Add(company);
         var res = await _autoDbContext.Db.SaveChangesAsync();
 
         return Ok(res > 0);
